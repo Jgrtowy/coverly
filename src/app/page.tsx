@@ -1,13 +1,17 @@
+"use client";
 import DarkVeil from "~/components/DarkVeil";
+import HomePage from "~/components/HomePage";
 import Landing from "~/components/Landing";
+import { authClient } from "~/lib/auth-client";
 
 export default function Home() {
+    const { data: session } = authClient.useSession();
     return (
         <main className="w-screen h-dvh relative">
             <div className="w-full h-full absolute left-0 top-0 -z-10">
                 <DarkVeil />
             </div>
-            <Landing />
+            {session ? <HomePage /> : <Landing />}
         </main>
     );
 }
