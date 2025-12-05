@@ -41,7 +41,7 @@ export default function Greeting() {
     );
 
     return (
-        <div className="flex flex-col gap-2 mt-2">
+        <div className="flex flex-col gap-2 mt-6">
             <h1 className="font-bold text-4xl">
                 Welcome back, {session?.user?.name}
             </h1>

@@ -7,7 +7,12 @@ const nextConfig: NextConfig = {
                 protocol: "https",
                 hostname: "i.scdn.co",
             },
+            {
+                protocol: "https",
+                hostname: "scannables.scdn.co",
+            },
         ],
+        dangerouslyAllowSVG: true,
     },
 };
 

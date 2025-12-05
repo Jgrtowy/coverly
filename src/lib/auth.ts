@@ -15,6 +15,8 @@ export const auth = betterAuth({
             strategy: "jwe", // can be "jwt" or "compact"
             refreshCache: true, // Enable stateless refresh
         },
+        expiresIn: 60 * 60, // 60 minutes session expiration
+        updateAge: 45 * 60, // 45 minutes session update age
     },
     account: {
         storeStateStrategy: "cookie",

@@ -60,7 +60,7 @@
     --accent: oklch(0.767 0.043 292.4);
     --accent-foreground: oklch(0.237 0.081 292.4);
     --destructive: oklch(0.6 0.161 33.1);
-    --border: oklch(0.776 0.012 292.4);
+    --border: oklch(77.634% 0.01136 291.735 / 0.4);
     --input: oklch(0.776 0.012 292.4);
     --ring: oklch(0.6 0.017 292.4);
     --chart-1: oklch(0.646 0.222 41.116);
@@ -85,18 +85,18 @@
     --card-foreground: oklch(0.237 0.081 292.4);
     --popover: oklch(0.887 0.026 292.4);
     --popover-foreground: oklch(0.237 0.081 292.4);
-    --primary: oklch(0.237 0.081 292.4);
-    --primary-foreground: oklch(0.887 0.026 292.4);
-    --secondary: oklch(0.6 0.017 292.4);
+    --primary: oklch(0.887 0.026 292.4);
+    --primary-foreground: oklch(0.237 0.081 292.4);
+    --secondary: oklch(0.4 0.05 292.4);
     --secondary-foreground: oklch(0.887 0.026 292.4);
-    --muted: oklch(0.6 0.017 292.4);
-    --muted-foreground: oklch(0.776 0.012 292.4);
-    --accent: oklch(0.6 0.017 292.4);
+    --muted: oklch(0.35 0.04 292.4);
+    --muted-foreground: oklch(0.7 0.02 292.4);
+    --accent: oklch(0.4 0.05 292.4);
     --accent-foreground: oklch(0.887 0.026 292.4);
     --destructive: oklch(0.6 0.161 33.1);
-    --border: oklch(0.887 0.026 292.4);
-    --input: oklch(0.237 0.081 292.4 / 0.15);
-    --ring: oklch(0.6 0.017 292.4);
+    --border: oklch(0.887 0.026 292.4 / 0.25);
+    --input: oklch(0.5 0.04 292.4);
+    --ring: oklch(0.7 0.04 292.4);
     --chart-1: oklch(0.488 0.243 264.376);
     --chart-2: oklch(0.696 0.17 162.48);
     --chart-3: oklch(0.769 0.188 70.08);
@@ -106,10 +106,10 @@
     --sidebar-foreground: oklch(0.887 0.026 292.4);
     --sidebar-primary: oklch(0.488 0.243 264.376);
     --sidebar-primary-foreground: oklch(0.887 0.026 292.4);
-    --sidebar-accent: oklch(0.6 0.017 292.4);
+    --sidebar-accent: oklch(0.4 0.05 292.4);
     --sidebar-accent-foreground: oklch(0.887 0.026 292.4);
-    --sidebar-border: oklch(0.237 0.081 292.4 / 0.1);
-    --sidebar-ring: oklch(0.6 0.017 292.4);
+    --sidebar-border: oklch(0.887 0.026 292.4 / 0.15);
+    --sidebar-ring: oklch(0.7 0.04 292.4);
 }
 
 @layer base {
@@ -119,4 +119,11 @@
     body {
         @apply bg-background text-foreground;
     }
+}
+#preview-scale-wrapper {
+    height: 100%;
+}
+
+#preview-capture {
+    transform-origin: top center;
 }

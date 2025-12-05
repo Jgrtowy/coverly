@@ -8,6 +8,7 @@ import { Avatar, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Separator } from "./ui/separator";
+import { Skeleton } from "./ui/skeleton";
 
 export default function Header() {
     const { data: session } = authClient.useSession();
@@ -31,7 +32,8 @@ export default function Header() {
                 <Searchbar />
             </div>
             <div className="w-1/3 flex justify-end">
-                {session ? (
+                {!session && <Skeleton className="size-10 rounded-full" />}
+                {session && (
                     <div className="flex w-full justify-end items-center gap-2">
                         <Popover>
                             <PopoverTrigger>
@@ -49,7 +51,7 @@ export default function Header() {
                                 </Avatar>
                             </PopoverTrigger>
                             <PopoverContent
-                                className="w-[360px] p-0 bg-component-secondary overflow-hidden border border-accent-foreground/20"
+                                className="w-[360px] p-0 bg-accent/15 backdrop-blur-sm overflow-hidden border border-accent-foreground/20"
                                 align="end"
                             >
                                 <div className="flex flex-col p-4">
@@ -72,10 +74,6 @@ export default function Header() {
                             </PopoverContent>
                         </Popover>
                     </div>
-                ) : (
-                    <Button onClick={() => signIn()}>
-                        Continue with Spotify
-                    </Button>
                 )}
             </div>
         </div>

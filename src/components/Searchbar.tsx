@@ -1,9 +1,23 @@
 import { Search } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useAppStateStore } from "~/lib/store";
 import { Input } from "./ui/input";
 
 export default function Searchbar() {
     const { searchQuery, setSearchQuery } = useAppStateStore();
+    const [inputValue, setInputValue] = useState(searchQuery);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setSearchQuery(inputValue);
+        }, 300);
+
+        return () => clearTimeout(timer);
+    }, [inputValue, setSearchQuery]);
+
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputValue(e.target.value);
+    };
 
     return (
         <div className="relative h-10 w-full">
@@ -14,8 +28,8 @@ export default function Searchbar() {
                 id="search-input"
                 placeholder="Search..."
                 className="border border-accent-foreground/20 bg-accent/50 dark:bg-accent-foreground/10 pl-10 w-full h-full"
-                onChange={(e) => setSearchQuery(e.target.value)}
-                value={searchQuery}
+                onChange={handleSearch}
+                value={inputValue}
             />
         </div>
     );

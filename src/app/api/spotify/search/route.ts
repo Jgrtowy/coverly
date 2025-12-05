@@ -1,17 +1,19 @@
-import { type NextRequest, NextResponse } from "next/server";
-import type { Album } from "spotify-types";
+import { NextResponse } from "next/server";
+import type { Album, Track } from "spotify-types";
 import { auth } from "~/lib/auth";
 
 export const dynamic = "force-dynamic";
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
     const token = await auth.api.getAccessToken({
         body: { providerId: "spotify" },
         headers: request.headers,
     });
 
+    const { query } = await request.json();
+
     const res = await fetch(
-        "https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=50",
+        `https://api.spotify.com/v1/search?q=${query}&type=album,track&market=US&limit=20`,
         {
             method: "GET",
             headers: {
@@ -27,17 +29,26 @@ export async function POST(request: NextRequest) {
 
     const data = await res.json();
 
-    const filtered = data.items.map((item: { album: Album }) => ({
-        id: item.album.id,
-        album_type: item.album.album_type,
-        name: item.album.name,
-        artists: item.album.artists,
-        images: item.album.images,
-    })) as Album[];
-
-    if (filtered.length === 0) {
+    if (!data.albums) {
         return new NextResponse(JSON.stringify([]), { status: 200 });
     }
+    const filtered = data.albums.items.map((item: Album) => ({
+        id: item.id,
+        album_type: item.album_type,
+        name: item.name,
+        artists: item.artists,
+        images: item.images,
+    })) as Album[];
+
+    filtered.push(
+        ...data.tracks.items.map((item: Track) => ({
+            id: item.album.id,
+            album_type: item.album.album_type,
+            name: item.album.name,
+            artists: item.album.artists,
+            images: item.album.images,
+        })),
+    );
 
     const uniqueAlbums = Array.from(
         new Map(filtered.map((item: Album) => [item.name, item])).values(),

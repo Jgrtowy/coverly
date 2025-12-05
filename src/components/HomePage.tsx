@@ -7,7 +7,7 @@ export default function HomePage() {
     const { searchQuery } = useAppStateStore();
 
     return (
-        <div className="p-4">
+        <div className="p-6">
             <Header />
             {searchQuery ? <SearchResults /> : <Greeting />}
         </div>
