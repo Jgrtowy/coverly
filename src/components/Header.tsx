@@ -3,6 +3,7 @@ import { AvatarFallback } from "@radix-ui/react-avatar";
 import { LogOut } from "lucide-react";
 import Image from "next/image";
 import { authClient } from "~/lib/auth-client";
+import { useAppStateStore } from "~/lib/store";
 import Searchbar from "./Searchbar";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
@@ -12,21 +13,30 @@ import { Skeleton } from "./ui/skeleton";
 
 export default function Header() {
     const { data: session } = authClient.useSession();
-
-    const signIn = async () => {
-        await authClient.signIn.social({ provider: "spotify" });
-    };
+    const { setSearchQuery, setInputValue } = useAppStateStore();
 
     return (
         <div className="flex justify-between">
-            <div className="flex w-1/3 items-center gap-2">
-                <Image
-                    src="/icon.svg"
-                    alt="Coverly Logo"
-                    width={36}
-                    height={36}
-                />
-                <h1 className="text-3xl font-black">Coverly</h1>
+            <div className="w-1/3">
+                <button
+                    type="button"
+                    onClick={() => {
+                        setSearchQuery("");
+                        setInputValue("");
+                    }}
+                    className="flex gap-2 items-center cursor-pointer group"
+                >
+                    <Image
+                        src="/icon.svg"
+                        alt="Coverly Logo"
+                        width={36}
+                        height={36}
+                        className="group-hover:-rotate-45 transition-transform duration-300"
+                    />
+                    <h1 className="text-3xl font-black group-hover:brightness-70 transition-all duration-300">
+                        Coverly
+                    </h1>
+                </button>
             </div>
             <div className="w-1/3">
                 <Searchbar />

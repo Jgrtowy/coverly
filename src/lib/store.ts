@@ -3,7 +3,9 @@ import { create } from "zustand";
 
 interface AppState {
     searchQuery: string;
+    inputValue: string;
     setSearchQuery: (query: string) => void;
+    setInputValue: (value: string) => void;
 }
 
 interface FavoritesState {
@@ -13,20 +15,27 @@ interface FavoritesState {
 
 interface EditorStore {
     settings: {
+        customImage: string | null;
         showTrackNumbers: boolean;
         showSpotifyCode: boolean;
         showWatermark: boolean;
         layout: "single" | "list";
-        orientation: "vertical" | "horizontal";
         tracks: number;
         padding: number;
+        textColor: string;
+        singleTrackIndex: number;
+        bgColor: string;
+        bgColorOnlyOnPreview: boolean;
+        trackFontSize: number;
     };
     setSettings: (settings: EditorStore["settings"]) => void;
 }
 
 export const useAppStateStore = create<AppState>((set) => ({
     searchQuery: "",
+    inputValue: "",
     setSearchQuery: (query) => set({ searchQuery: query }),
+    setInputValue: (value) => set({ inputValue: value }),
 }));
 
 export const useFavoritesStore = create<FavoritesState>((set) => ({
@@ -36,13 +45,18 @@ export const useFavoritesStore = create<FavoritesState>((set) => ({
 
 export const useEditorStore = create<EditorStore>((set) => ({
     settings: {
+        customImage: null,
         showTrackNumbers: true,
         showSpotifyCode: false,
         showWatermark: true,
         layout: "single",
-        orientation: "vertical",
+        singleTrackIndex: 0,
         tracks: 20,
         padding: 56,
+        textColor: "#000000",
+        bgColor: "#ffffff",
+        bgColorOnlyOnPreview: true,
+        trackFontSize: 14,
     },
     setSettings: (settings) => set({ settings }),
 }));

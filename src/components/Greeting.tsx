@@ -1,37 +1,34 @@
 import { motion } from "motion/react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
+import useSWR from "swr";
 import { authClient } from "~/lib/auth-client";
 import { useFavoritesStore } from "~/lib/store";
+import { fetcher } from "~/lib/utils";
 import AlbumCard from "./AlbumCard";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 import { Skeleton } from "./ui/skeleton";
 
 export default function Greeting() {
     const { favorites, setFavorites } = useFavoritesStore();
-    const [isLoading, setIsLoading] = useState(true);
     const { data: session } = authClient.useSession();
 
-    const fetchFavorites = useCallback(async () => {
-        if (favorites.length > 0) {
-            setIsLoading(false);
-            return;
-        }
-        setIsLoading(true);
-        const response = await fetch("/api/spotify/top", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
+    const { isLoading } = useSWR(
+        favorites.length === 0 ? "/api/spotify/top" : null,
+        (url) =>
+            fetcher(
+                url,
+                JSON.stringify({ limit: 10, time_range: "short_term" }),
+            ),
+        {
+            onSuccess: (data) => {
+                if (data && favorites.length === 0) {
+                    setFavorites(data);
+                }
             },
-            body: JSON.stringify({ limit: 10, time_range: "short_term" }),
-        });
-        const data = await response.json();
-        setFavorites(data);
-        setIsLoading(false);
-    }, [favorites, setFavorites]);
-
-    useEffect(() => {
-        fetchFavorites();
-    }, []);
+            revalidateOnFocus: false,
+            revalidateOnReconnect: false,
+        },
+    );
 
     const memoizedFavorites = useMemo(() => favorites, [favorites]);
 

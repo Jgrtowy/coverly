@@ -23,4 +23,11 @@ export const auth = betterAuth({
         storeAccountCookie: true, // Store account data after OAuth flow in a cookie (useful for database-less flows)
     },
     trustedOrigins: [process.env.BETTER_AUTH_URL as string],
+    onAPIError: {
+        throw: true,
+        onError: (error) => {
+            console.error("BetterAuth API Error:", error);
+        },
+        errorURL: "/",
+    },
 });

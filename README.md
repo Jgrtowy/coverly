@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
+<img src="public/logo.svg" height="128"/>
 
-## Getting Started
+# Generate your favorite album poster in just a few seconds!
+</div>
 
-First, run the development server:
+## Features ⭐
+- [x] Spotify OAuth
+- [x] Searchbar
+- [x] Poster preview
+- [x] Multiple editing options
+- [x] Current favorites greeting
+- [ ] Proper mobile view
+- [ ] *...and more to come!*
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+<details>
+  <summary><h2><a href="#">&#x200B;</a>Screenshots 📷</h2><sub>*to be added!*</sub></summary>
+</details>
+
+## Developing 🧑‍💻
+
+Built on top of [Next.js](https://nextjs.org), using [Bun](https://bun.sh) runtime.
+
+1. Clone this repo.
+```sh
+$ git clone https://github.com/Jgrtowy/coverly.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Go to [Spotify Developer Dashboard](https://developer.spotify.com/dashboard) and create a new app.
+* Set the Redirect URI to `http://127.0.0.1:3000/api/auth/callback/spotify`.
+* *Optional:* For production environments, set the Redirect URL to `https://[YOUR_DOMAIN]/api/auth/callback/spotify`.
+* Check `Web API` checkbox
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Copy the `Client ID` and `Client Secret` values from the dashboard.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Add user to sign in with in `User Management` tab
+    
+5. Generate BetterAuth secret with
+```sh
+$ openssl rand -base64 32
+```
 
-## Learn More
+1. Copy the `.env.example` file, rename it to `.env` and fill out all fields.
 
-To learn more about Next.js, take a look at the following resources:
+2. Install dependencies
+```sh
+$ bun install
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Run development server
+```sh
+$ bun dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+And you're ready to go!
 
-## Deploy on Vercel
+## Contributing 🌟
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Contributions are always appreciated in any form!**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+*Found an bug? Have an idea for a new feature?*<br />
+Create an issue!
+
+*Want to fix or implement something new yourself?*<br />
+Fork > make changes > create a PR<br />
+I'll review it and if it looks good, merge it!

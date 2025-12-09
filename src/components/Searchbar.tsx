@@ -1,11 +1,10 @@
 import { Search } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAppStateStore } from "~/lib/store";
 import { Input } from "./ui/input";
 
 export default function Searchbar() {
-    const { searchQuery, setSearchQuery } = useAppStateStore();
-    const [inputValue, setInputValue] = useState(searchQuery);
+    const { setSearchQuery, inputValue, setInputValue } = useAppStateStore();
 
     useEffect(() => {
         const timer = setTimeout(() => {

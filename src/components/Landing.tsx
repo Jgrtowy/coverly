@@ -1,16 +1,27 @@
 "use client";
 
+import { Loader2, SendHorizonal } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
 import { authClient } from "~/lib/auth-client";
-import { Button } from "./ui/button";
+import AnimatedGradientButton from "./AnimatedGradientButton";
+import RainbowText from "./RainbowText";
 
 export default function Landing() {
+    const [isLoggingIn, setIsLoggingIn] = useState(false);
+
     const signIn = async () => {
-        await authClient.signIn.social({ provider: "spotify" });
+        if (isLoggingIn) return;
+        setIsLoggingIn(true);
+        try {
+            await authClient.signIn.social({ provider: "spotify" });
+        } finally {
+            setIsLoggingIn(false);
+        }
     };
 
     return (
-        <main className="dark:text-foreground text-background w-screen h-dvh flex flex-col justify-center items-center relative gap-4">
+        <main className="w-screen h-dvh flex flex-col justify-center items-center relative gap-4">
             <div className="flex gap-4 items-center">
                 <Image
                     src="/icon.svg"
@@ -20,16 +31,24 @@ export default function Landing() {
                 />
                 <h1 className="text-6xl font-black">Coverly</h1>
             </div>
-            <h2 className="text-2xl font-bold italic">
-                Generate beautiful posters from your favorite albums in just a
-                few clicks!
+            <h2 className="text-2xl font-bold">
+                Generate <RainbowText className="italic ">stunning</RainbowText>{" "}
+                posters from your favorite albums in just a few clicks!
             </h2>
-            <Button
-                className="text-xl w-72 h-16 cursor-pointer"
+            <AnimatedGradientButton
+                className="text-xl w-72 h-16 cursor-pointer hover:scale-110 flex justify-center items-center disabled:cursor-not-allowed disabled:brightness-70"
                 onClick={() => signIn()}
+                disabled={isLoggingIn}
             >
-                Continue with Spotify
-            </Button>
+                <div className="flex items-center">
+                    {isLoggingIn ? (
+                        <Loader2 className="animate-spin mr-2" />
+                    ) : (
+                        <SendHorizonal className="mr-2" />
+                    )}
+                    Continue with Spotify
+                </div>
+            </AnimatedGradientButton>
         </main>
     );
 }

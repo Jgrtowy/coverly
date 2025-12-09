@@ -2,7 +2,6 @@
 import html2canvas from "html2canvas-pro";
 import { Loader2, X } from "lucide-react";
 import { useTheme } from "next-themes";
-import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -12,7 +11,7 @@ import LightVeil from "~/components/LightVeil";
 import Preview from "~/components/Preview";
 import SettingsPanel from "~/components/SettingsPanel";
 import { Button } from "~/components/ui/button";
-import { Skeleton } from "~/components/ui/skeleton";
+import { useEditorStore } from "~/lib/store";
 
 export default function page() {
     const searchParams = useSearchParams();
@@ -20,7 +19,7 @@ export default function page() {
     const [album, setAlbum] = useState<Album | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const { resolvedTheme } = useTheme();
-    const [isLoadingPreview, setIsLoadingPreview] = useState(true);
+    const { settings, setSettings } = useEditorStore();
 
     const fetchData = async (id: string | null) => {
         if (!id) return;
@@ -70,7 +69,6 @@ export default function page() {
         const timer = setTimeout(scale, 150);
 
         window.addEventListener("resize", scale);
-        setIsLoadingPreview(false);
 
         return () => {
             clearTimeout(timer);
@@ -81,9 +79,18 @@ export default function page() {
     const handleExport = async () => {
         const node = document.getElementById("preview-capture");
         if (!node) return;
+        const tempColor = settings.bgColor;
+        if (settings.bgColorOnlyOnPreview) {
+            setSettings({
+                ...settings,
+                bgColor: "#ffffff",
+            });
+        }
 
         const prevTransform = node.style.transform;
         node.style.transform = "none";
+
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         const canvas = await html2canvas(node, {
             scale: 4,
@@ -96,13 +103,32 @@ export default function page() {
         node.style.transform = prevTransform;
 
         const link = document.createElement("a");
-        link.download = "preview-export.png";
+        link.download = `${album?.name ? `${album.name}-coverly` : "album-coverly"}.png`;
         link.href = canvas.toDataURL("image/png");
         link.click();
+
+        if (settings.bgColorOnlyOnPreview) {
+            setSettings({
+                ...settings,
+                bgColor: tempColor,
+            });
+        }
     };
 
     return (
-        <div className="w-screen h-dvh p-4">
+        <div className="w-screen h-dvh p-4 gap-2">
+            <div className="flex gap-4 mb-2">
+                <Button
+                    size="icon"
+                    variant="default"
+                    className="bg-destructive/40 hover:bg-destructive/50 text-primary"
+                    asChild
+                >
+                    <Link href="/">
+                        <X />
+                    </Link>
+                </Button>
+            </div>
             {isLoading && (
                 <div className="text-5xl flex items-center gap-4">
                     <Loader2 className="size-12 animate-spin" />
@@ -115,45 +141,29 @@ export default function page() {
                 </div>
             )}
             {!isLoading && album && (
-                <div className="flex justify-between gap-8 h-[calc(100dvh-4rem)]">
-                    <div className="w-1/2 overflow-y-auto">
-                        <div className="flex gap-4 mb-2">
-                            <Button
-                                size="icon"
-                                variant="default"
-                                className="bg-destructive/40 hover:bg-destructive/50 text-primary"
-                                asChild
-                            >
-                                <Link href="/">
-                                    <X />
-                                </Link>
-                            </Button>
-                        </div>
-                        <SettingsPanel album={album} />
+                <div className="flex justify-between lg:flex-row flex-col gap-8 lg:h-[calc(100dvh-4rem)] h-auto">
+                    <div className="lg:w-1/2 w-full overflow-y-auto">
+                        <SettingsPanel album={album} export={handleExport} />
                     </div>
 
-                    <div className="w-1/2 flex items-start justify-center overflow-visible">
-                        {isLoadingPreview ? (
-                            <Skeleton className="w-[210mm] h-[297mm] rounded shadow-xl" />
-                        ) : (
+                    <div className="lg:w-1/2 items-start justify-center overflow-visible">
+                        <div
+                            id="preview-scale-wrapper"
+                            className="h-full w-full flex items-start justify-center overflow-visible"
+                        >
                             <div
-                                id="preview-scale-wrapper"
-                                className="h-full w-full flex items-start justify-center overflow-visible"
+                                id="preview-capture"
+                                className="bg-white shadow-xl"
+                                style={{
+                                    width: "210mm",
+                                    height: "297mm",
+                                    aspectRatio: "210 / 297",
+                                    transformOrigin: "top center",
+                                }}
                             >
-                                <div
-                                    id="preview-capture"
-                                    className="bg-white shadow-xl"
-                                    style={{
-                                        width: "210mm", // A4 width
-                                        height: "297mm", // A4 height
-                                        aspectRatio: "210 / 297",
-                                        transformOrigin: "top center",
-                                    }}
-                                >
-                                    <Preview album={album} />
-                                </div>
+                                <Preview album={album} />
                             </div>
-                        )}
+                        </div>
                     </div>
                 </div>
             )}
