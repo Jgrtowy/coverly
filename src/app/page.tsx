@@ -1,6 +1,5 @@
 "use client";
 import { useTheme } from "next-themes";
-import { useEffect } from "react";
 import DarkVeil from "~/components/DarkVeil";
 import HomePage from "~/components/HomePage";
 import Landing from "~/components/Landing";
@@ -11,9 +10,6 @@ export default function Home() {
     const { data: session } = authClient.useSession();
     const { resolvedTheme } = useTheme();
 
-    useEffect(() => {
-        console.log("Current theme:", resolvedTheme);
-    }, [resolvedTheme]);
     return (
         <main className="w-screen h-dvh relative">
             <div className="w-full h-full absolute left-0 top-0 -z-10">

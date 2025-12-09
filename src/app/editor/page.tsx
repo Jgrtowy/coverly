@@ -4,7 +4,7 @@ import { Loader2, X } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import type { Album } from "spotify-types";
 import DarkVeil from "~/components/DarkVeil";
 import LightVeil from "~/components/LightVeil";
@@ -13,12 +13,12 @@ import SettingsPanel from "~/components/SettingsPanel";
 import { Button } from "~/components/ui/button";
 import { useEditorStore } from "~/lib/store";
 
-export default function page() {
+function EditorContent() {
     const searchParams = useSearchParams();
     const id = searchParams.get("id");
     const [album, setAlbum] = useState<Album | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const { resolvedTheme } = useTheme();
+    const [error, setError] = useState<string | null>(null);
     const { settings, setSettings } = useEditorStore();
 
     const fetchData = async (id: string | null) => {
@@ -35,6 +35,8 @@ export default function page() {
 
             if (!response.ok) {
                 console.error("Failed to fetch album data");
+                setIsLoading(false);
+                setError("Failed to fetch album data");
                 return;
             }
 
@@ -116,29 +118,15 @@ export default function page() {
     };
 
     return (
-        <div className="w-screen h-dvh p-4 gap-2">
-            <div className="flex gap-4 mb-2">
-                <Button
-                    size="icon"
-                    variant="default"
-                    className="bg-destructive/40 hover:bg-destructive/50 text-primary"
-                    asChild
-                >
-                    <Link href="/">
-                        <X />
-                    </Link>
-                </Button>
-            </div>
+        <>
             {isLoading && (
                 <div className="text-5xl flex items-center gap-4">
                     <Loader2 className="size-12 animate-spin" />
                     Loading editor...
                 </div>
             )}
-            {!isLoading && !album && (
-                <div className="text-2xl text-red-500">
-                    Failed to load album data. Please try again.
-                </div>
+            {!isLoading && !album && error && (
+                <div className="text-2xl text-red-500">{error}</div>
             )}
             {!isLoading && album && (
                 <div className="flex justify-between lg:flex-row flex-col gap-8 lg:h-[calc(100dvh-4rem)] h-auto">
@@ -167,6 +155,37 @@ export default function page() {
                     </div>
                 </div>
             )}
+        </>
+    );
+}
+export default function page() {
+    const { resolvedTheme } = useTheme();
+    return (
+        <div className="w-screen h-dvh p-4 gap-2">
+            <div className="flex gap-4 mb-2">
+                <Button
+                    size="icon"
+                    variant="default"
+                    className="bg-destructive/40 hover:bg-destructive/50 text-primary"
+                    asChild
+                >
+                    <Link href="/">
+                        <X />
+                    </Link>
+                </Button>
+            </div>
+            <Suspense
+                fallback={
+                    <div className="w-screen h-dvh p-4 gap-2 flex items-center justify-center">
+                        <div className="text-5xl flex items-center gap-4">
+                            <Loader2 className="size-12 animate-spin" />
+                            Loading editor...
+                        </div>
+                    </div>
+                }
+            >
+                <EditorContent />
+            </Suspense>
             <div className="w-full h-full absolute left-0 top-0 -z-10">
                 {resolvedTheme === "light" ? <LightVeil /> : <DarkVeil />}
             </div>

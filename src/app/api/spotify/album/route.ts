@@ -23,7 +23,6 @@ export async function POST(request: Request) {
     }
 
     const data = (await res.json()) as Album;
-    console.log(data);
 
     return new NextResponse(JSON.stringify(data), { status: 200 });
 }
