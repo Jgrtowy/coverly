@@ -85,20 +85,20 @@ export default function Preview({ album }: { album: Album }) {
                         </div>
                         <Separator className="h-1 bg-black" />
                     </div>
-                    <div className="max-w-full flex flex-col flex-wrap overflow-y-auto ">
+                    <div className="max-w-full flex flex-col flex-wrap overflow-y-auto">
                         {tracks
                             .slice(0, settings.tracks)
                             .map((track, index) => (
                                 <div
                                     key={track.id}
-                                    className="flex max-w-fit"
+                                    className="flex max-w-fit items-center"
                                     style={{
                                         fontSize: `${settings.trackFontSize}px`,
                                         gap: `${settings.trackFontSize * 0.8}px`,
                                     }}
                                 >
                                     {settings.showTrackNumbers && (
-                                        <span className="w-4 tabular-nums font-mono font-bold">
+                                        <span className="w-4 font-mono font-bold">
                                             {(index + 1)
                                                 .toString()
                                                 .padStart(2, "0")}

@@ -8,12 +8,14 @@ const MovingBorderButton = ({
     className,
     onClick,
     type = "button",
+    disabled,
 }: {
     children?: React.ReactNode;
     wrapperClassName?: string;
     className?: string;
     onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
     type?: "button" | "submit" | "reset";
+    disabled?: boolean;
 }) => {
     const [isHovered, setIsHovered] = useState(false);
 
@@ -27,6 +29,7 @@ const MovingBorderButton = ({
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             type={type}
+            disabled={disabled}
         >
             <span
                 className={cn(

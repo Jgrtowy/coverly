@@ -1,4 +1,4 @@
-import { Rocket } from "lucide-react";
+import { Loader2, Rocket } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { Album, SimplifiedTrack } from "spotify-types";
 import { z } from "zod";
@@ -22,9 +22,11 @@ const urlSchema = z.string().url().or(z.literal(""));
 export default function SettingsPanel({
     album,
     export: exportFunc,
+    exporting,
 }: {
     album: Album;
     export: () => void;
+    exporting: boolean;
 }) {
     const { settings, setSettings } = useEditorStore();
     const [inputValue, setInputValue] = useState(settings.customImage ?? "");
@@ -304,11 +306,16 @@ export default function SettingsPanel({
                 </ItemContent>
                 <ItemActions>
                     <MovingBorderButton
-                        className="w-full bg-background hover:bg-background/90 cursor-pointer"
+                        className="w-full bg-background hover:bg-background/90 cursor-pointer disabled:cursor-not-allowed disabled:brightness-70"
                         onClick={() => exportFunc()}
+                        disabled={exporting}
                     >
                         <div className="flex items-center gap-2">
-                            <Rocket />
+                            {exporting ? (
+                                <Loader2 className="animate-spin" />
+                            ) : (
+                                <Rocket />
+                            )}
                             Export Poster
                         </div>
                     </MovingBorderButton>

@@ -17,7 +17,7 @@ export default function Header() {
 
     return (
         <div className="flex justify-between">
-            <div className="w-1/3">
+            <div className="sm:w-1/3 w-0 overflow-hidden">
                 <button
                     type="button"
                     onClick={() => {
@@ -38,10 +38,10 @@ export default function Header() {
                     </h1>
                 </button>
             </div>
-            <div className="w-1/3">
+            <div className="sm:w-1/3 w-3/4">
                 <Searchbar />
             </div>
-            <div className="w-1/3 flex justify-end">
+            <div className="sm:w-1/3 w-1/4 flex justify-end">
                 {!session && <Skeleton className="size-10 rounded-full" />}
                 {session && (
                     <div className="flex w-full justify-end items-center gap-2">

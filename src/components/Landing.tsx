@@ -31,7 +31,7 @@ export default function Landing() {
                 />
                 <h1 className="text-6xl font-black">Coverly</h1>
             </div>
-            <h2 className="text-2xl font-bold">
+            <h2 className="text-2xl font-bold text-center">
                 Generate <RainbowText className="italic ">stunning</RainbowText>{" "}
                 posters from your favorite albums in just a few clicks!
             </h2>

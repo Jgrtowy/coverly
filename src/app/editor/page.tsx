@@ -20,6 +20,7 @@ function EditorContent() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const { settings, setSettings } = useEditorStore();
+    const [exporting, setExporting] = useState(false);
 
     const fetchData = async (id: string | null) => {
         if (!id) return;
@@ -52,35 +53,10 @@ function EditorContent() {
         fetchData(id);
     }, [id]);
 
-    useEffect(() => {
-        const scale = () => {
-            const wrapper = document.getElementById("preview-scale-wrapper");
-            const preview = document.getElementById("preview-capture");
-            if (!wrapper || !preview) return;
-
-            const availableHeight =
-                wrapper.parentElement?.clientHeight ?? wrapper.clientHeight;
-            const previewHeight = preview.getBoundingClientRect().height;
-
-            const scaleFactor = availableHeight / previewHeight;
-            preview.style.transform = `scale(${Math.min(scaleFactor, 1)}) translateZ(0)`;
-        };
-
-        if (!album) return;
-
-        const timer = setTimeout(scale, 150);
-
-        window.addEventListener("resize", scale);
-
-        return () => {
-            clearTimeout(timer);
-            window.removeEventListener("resize", scale);
-        };
-    }, [album]);
-
     const handleExport = async () => {
         const node = document.getElementById("preview-capture");
         if (!node) return;
+        setExporting(true);
         const tempColor = settings.bgColor;
         if (settings.bgColorOnlyOnPreview) {
             setSettings({
@@ -91,9 +67,9 @@ function EditorContent() {
 
         const prevTransform = node.style.transform;
         node.style.transform = "none";
-
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
+        if (settings.bgColorOnlyOnPreview && settings.bgColor !== "#ffffff") {
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+        }
         const canvas = await html2canvas(node, {
             scale: 4,
             backgroundColor: "#ffffff",
@@ -115,6 +91,7 @@ function EditorContent() {
                 bgColor: tempColor,
             });
         }
+        setExporting(false);
     };
 
     return (
@@ -129,31 +106,56 @@ function EditorContent() {
                 <div className="text-2xl text-red-500">{error}</div>
             )}
             {!isLoading && album && (
-                <div className="flex justify-between lg:flex-row flex-col gap-8 lg:h-[calc(100dvh-4rem)] h-auto">
-                    <div className="lg:w-1/2 w-full overflow-y-auto">
-                        <SettingsPanel album={album} export={handleExport} />
-                    </div>
-
-                    <div className="lg:w-1/2 items-start justify-center overflow-visible">
+                <>
+                    <div
+                        id="preview-scale-wrapper"
+                        className="absolute overflow-hidden"
+                        style={{
+                            left: "-9999px",
+                            top: "0",
+                            width: "210mm",
+                            height: "297mm",
+                        }}
+                    >
                         <div
-                            id="preview-scale-wrapper"
-                            className="h-full w-full flex items-start justify-center overflow-visible"
+                            id="preview-capture"
+                            className="bg-white shadow-xl"
+                            style={{
+                                width: "210mm",
+                                height: "297mm",
+                                aspectRatio: "210 / 297",
+                                transformOrigin: "top center",
+                            }}
                         >
-                            <div
-                                id="preview-capture"
-                                className="bg-white shadow-xl"
-                                style={{
-                                    width: "210mm",
-                                    height: "297mm",
-                                    aspectRatio: "210 / 297",
-                                    transformOrigin: "top center",
-                                }}
-                            >
-                                <Preview album={album} />
+                            <Preview album={album} />
+                        </div>
+                    </div>
+                    <div className="relative z-10 flex justify-between xl:flex-row flex-col gap-8 xl:h-[calc(100dvh-4rem)] max-h-dvh">
+                        <div className="xl:w-1/2 w-full">
+                            <SettingsPanel
+                                album={album}
+                                export={handleExport}
+                                exporting={exporting}
+                            />
+                        </div>
+
+                        <div className="xl:w-1/2 items-start justify-center overflow-visible">
+                            <div className="h-full w-full flex items-start justify-center overflow-visible 2xl:scale-100 xl:scale-90 md:scale-100 scale-65 sm:scale-70">
+                                <div
+                                    className="bg-white shadow-xl"
+                                    style={{
+                                        width: "210mm",
+                                        height: "297mm",
+                                        aspectRatio: "210 / 297",
+                                        transformOrigin: "top center",
+                                    }}
+                                >
+                                    <Preview album={album} />
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </>
             )}
         </>
     );
