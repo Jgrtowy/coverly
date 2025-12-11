@@ -140,7 +140,7 @@ function EditorContent() {
                         </div>
 
                         <div className="xl:w-1/2 items-start justify-center overflow-visible">
-                            <div className="h-full w-full flex items-start justify-center overflow-visible 2xl:scale-100 xl:scale-90 md:scale-100 scale-65 sm:scale-70">
+                            <div className="h-full w-full flex items-start justify-center overflow-visible 2xl:scale-100 xl:scale-90 md:scale-100 scale-40 xs:scale-60 sm:scale-70">
                                 <div
                                     className="bg-white shadow-xl"
                                     style={{
