@@ -1,5 +1,5 @@
 <div align="center">
-<img src="public/logo.svg" height="128"/>
+<a href="https://coverly.jgrtowy.xyz" rel="noreferrer noopener" target="_blank"><img src="public/logo.svg" height="128"/></a>
 
 # Generate your favorite album poster in just a few seconds!
 </div>
