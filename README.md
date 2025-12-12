@@ -2,6 +2,7 @@
 <a href="https://coverly.jgrtowy.xyz" rel="noreferrer noopener" target="_blank"><img src="public/logo.svg" height="128"/></a>
 
 # Generate your favorite album poster in just a few seconds!
+## This app lets you sign in with your Spotify account, select your desired album, create a fancy, customizable poster and export it as a printable `.png` file!
 </div>
 
 ## Features ⭐
@@ -10,11 +11,12 @@
 - [x] Poster preview
 - [x] Multiple editing options
 - [x] Current favorites greeting
+- [x] Working export to `.png`   
 - [ ] Proper mobile view
 - [ ] *...and more to come!*
 
 <details>
-  <summary><h2><a href="#">&#x200B;</a>Screenshots 📷</h2><sub>*to be added!*</sub></summary>
+  <summary><h2><a href="#">&#x200B;</a>Screenshots 📷</h2><sub>*click!*</sub></summary>
   <p><img width="1582" height="1034" alt="image" src="https://github.com/user-attachments/assets/e8518260-991c-4486-bc5d-c5f4cb821cc3" /></p>
   <p><img width="1582" height="1034" alt="image" src="https://github.com/user-attachments/assets/d6a98a88-0c2a-442f-92e9-66061f1509c0" /></p>
   <p><img width="1582" height="1034" alt="image" src="https://github.com/user-attachments/assets/724f07c8-384f-4a32-afa4-e57511a7a658" /></p>
@@ -46,14 +48,14 @@ $ git clone https://github.com/Jgrtowy/coverly.git
 $ openssl rand -base64 32
 ```
 
-1. Copy the `.env.example` file, rename it to `.env` and fill out all fields.
+6. Copy the `.env.example` file, rename it to `.env` and fill out all fields.
 
-2. Install dependencies
+7. Install dependencies
 ```sh
 $ bun install
 ```
 
-1. Run development server
+8. Run development server
 ```sh
 $ bun dev
 ```
